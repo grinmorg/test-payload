@@ -13,6 +13,8 @@ import { Media } from './collections/Media'
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
+console.log('DATABASE_URL: ', process.env.DATABASE_URL)
+
 export default buildConfig({
   admin: {
     user: Users.slug,
@@ -28,7 +30,7 @@ export default buildConfig({
   },
   db: postgresAdapter({
     pool: {
-      connectionString: process.env.DATABASE_URI || '',
+      connectionString: process.env.DATABASE_URL || '',
     },
   }),
   sharp,
