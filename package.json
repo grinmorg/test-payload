@@ -12,7 +12,11 @@
     "generate:types": "cross-env NODE_OPTIONS=--no-deprecation payload generate:types",
     "lint": "cross-env NODE_OPTIONS=--no-deprecation next lint",
     "payload": "cross-env NODE_OPTIONS=--no-deprecation payload",
-    "start": "cross-env NODE_OPTIONS=--no-deprecation next start"
+    "start": "cross-env NODE_OPTIONS=--no-deprecation next start",
+    "docker:dev": "docker-compose -f docker-compose.dev.yml up -d",
+    "docker:dev:build": "docker-compose -f docker-compose.dev.yml up -d --build",
+    "docker:prod": "docker-compose -f docker-compose.prod.yml up -d",
+    "docker:prod:build": "docker-compose -f docker-compose.prod.yml up -d --build"
   },
   "dependencies": {
     "@payloadcms/next": "3.31.0",
