@@ -1,9 +1,7 @@
 FROM node:22.12.0-alpine AS base
 
 # Устанавливаем pnpm напрямую через npm и настраиваем окружение
-RUN npm install -g pnpm@8.15.7 && \
-    pnpm config set store-dir .pnpm-store && \
-    pnpm config set verify-store-integrity false
+RUN npm install -g pnpm
 
 # Этап установки зависимостей
 FROM base AS deps
