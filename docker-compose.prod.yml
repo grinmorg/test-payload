@@ -1,29 +1,17 @@
 services:
-  app:
-    build: .
-    restart: unless-stopped
-    ports:
-      - '3000:3000'
-    env_file:
-      - .env
-    depends_on:
-      postgres:
-        condition: service_healthy
-    volumes:
-      - ./public:/app/public # Для статических файлов
-
   postgres:
-    image: postgres:14.10-alpine
     restart: unless-stopped
+    image: postgres:14.10-alpine
     env_file:
       - .env
     volumes:
       - pgdata:/var/lib/postgresql/data
-    healthcheck:
-      test: ['CMD-SHELL', 'pg_isready -U ${DB_USER} -d ${DB_NAME}']
-      interval: 10s
-      timeout: 5s
-      retries: 5
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: '123456'
+      POSTGRES_DB: database
+    ports:
+      - '5432:5432'
 
 volumes:
   pgdata:
