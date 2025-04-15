@@ -41,29 +41,22 @@ jobs:
             [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
             [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
 
-            # 2. Проверяем доступность Node.js
-            echo "Node.js version: $(node -v)"
-            echo "npm version: $(npm -v)"
-            echo "pnpm path: $(which pnpm)"
-            echo "pm2 path: $(which pm2)"
-
-            # 3. Обновляем код
+            # 2. Обновляем код
             cd /home/test-payload
-            git fetch
-            git reset --hard origin/main
+            git pull origin main
 
-            # 4. Устанавливаем зависимости
+            # 3. Устанавливаем зависимости
             /usr/local/bin/pnpm install --frozen-lockfile
 
-            # 5. Собираем проект
+            # 4. Собираем проект
             /usr/local/bin/pnpm build
 
-            # 6. Перезапускаем приложение
+            # 5. Перезапускаем приложение
             sleep 5
             echo "Restarting PM2..."
             /usr/local/bin/pm2 restart 2
 
-            # 7. Проверяем статус
+            # 6. Проверяем статус
             echo "PM2 status:"
             /usr/local/bin/pm2 list
 
