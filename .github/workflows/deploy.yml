@@ -46,10 +46,10 @@ jobs:
             git pull origin main
 
             # 3. Устанавливаем зависимости
-            /usr/local/bin/pnpm install --frozen-lockfile
+            pnpm install --frozen-lockfile
 
             # 4. Собираем проект
-            /usr/local/bin/pnpm build
+            pnpm build
 
             # 5. Перезапускаем приложение
             sleep 5
