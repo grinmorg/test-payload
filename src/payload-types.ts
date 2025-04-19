@@ -67,16 +67,22 @@ export interface Config {
   };
   blocks: {};
   collections: {
-    users: User;
     media: Media;
+    users: User;
+    books: Book;
+    exchanges: Exchange;
+    reviews: Review;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
   };
   collectionsJoins: {};
   collectionsSelect: {
-    users: UsersSelect<false> | UsersSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
+    users: UsersSelect<false> | UsersSelect<true>;
+    books: BooksSelect<false> | BooksSelect<true>;
+    exchanges: ExchangesSelect<false> | ExchangesSelect<true>;
+    reviews: ReviewsSelect<false> | ReviewsSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
     'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
@@ -115,23 +121,6 @@ export interface UserAuthOperations {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "users".
- */
-export interface User {
-  id: number;
-  updatedAt: string;
-  createdAt: string;
-  email: string;
-  resetPasswordToken?: string | null;
-  resetPasswordExpiration?: string | null;
-  salt?: string | null;
-  hash?: string | null;
-  loginAttempts?: number | null;
-  lockUntil?: string | null;
-  password?: string | null;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "media".
  */
 export interface Media {
@@ -151,18 +140,137 @@ export interface Media {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "users".
+ */
+export interface User {
+  id: number;
+  username: string;
+  avatar?: (number | null) | Media;
+  bio?: string | null;
+  location?: {
+    city?: string | null;
+    district?: string | null;
+  };
+  rating?: number | null;
+  status?: ('Активен' | 'Неактивен' | 'Заблокирован') | null;
+  preferences?: {
+    notifications?: boolean | null;
+    theme?: ('Светлая' | 'Тёмная' | 'Системная') | null;
+  };
+  updatedAt: string;
+  createdAt: string;
+  email: string;
+  resetPasswordToken?: string | null;
+  resetPasswordExpiration?: string | null;
+  salt?: string | null;
+  hash?: string | null;
+  loginAttempts?: number | null;
+  lockUntil?: string | null;
+  password?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "books".
+ */
+export interface Book {
+  id: number;
+  title: string;
+  author: string;
+  description?: string | null;
+  cover?: (number | null) | Media;
+  year?: number | null;
+  genre?:
+    | (
+        | 'Художественная литература'
+        | 'Фантастика'
+        | 'Фэнтези'
+        | 'Детектив'
+        | 'Роман'
+        | 'Поэзия'
+        | 'Биография'
+        | 'История'
+        | 'Наука'
+        | 'Психология'
+        | 'Саморазвитие'
+        | 'Детская литература'
+        | 'Другое'
+      )
+    | null;
+  condition?: ('Отличное' | 'Хорошее' | 'Удовлетворительное' | 'Плохое') | null;
+  status?: ('Доступна для обмена' | 'Забронирована' | 'Обменяна') | null;
+  owner: number | User;
+  location?: {
+    city?: string | null;
+    district?: string | null;
+  };
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "exchanges".
+ */
+export interface Exchange {
+  id: number;
+  book: number | Book;
+  fromUser: number | User;
+  toUser: number | User;
+  status?: ('Запрошено' | 'Подтверждено' | 'Отменено' | 'Завершено') | null;
+  messages?:
+    | {
+        user: number | User;
+        text: string;
+        createdAt?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  meetingDetails?: {
+    date?: string | null;
+    location?: string | null;
+    notes?: string | null;
+  };
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "reviews".
+ */
+export interface Review {
+  id: number;
+  user: number | User;
+  rating: number;
+  text?: string | null;
+  exchange?: (number | null) | Exchange;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-locked-documents".
  */
 export interface PayloadLockedDocument {
   id: number;
   document?:
     | ({
+        relationTo: 'media';
+        value: number | Media;
+      } | null)
+    | ({
         relationTo: 'users';
         value: number | User;
       } | null)
     | ({
-        relationTo: 'media';
-        value: number | Media;
+        relationTo: 'books';
+        value: number | Book;
+      } | null)
+    | ({
+        relationTo: 'exchanges';
+        value: number | Exchange;
+      } | null)
+    | ({
+        relationTo: 'reviews';
+        value: number | Review;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -208,21 +316,6 @@ export interface PayloadMigration {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "users_select".
- */
-export interface UsersSelect<T extends boolean = true> {
-  updatedAt?: T;
-  createdAt?: T;
-  email?: T;
-  resetPasswordToken?: T;
-  resetPasswordExpiration?: T;
-  salt?: T;
-  hash?: T;
-  loginAttempts?: T;
-  lockUntil?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "media_select".
  */
 export interface MediaSelect<T extends boolean = true> {
@@ -238,6 +331,100 @@ export interface MediaSelect<T extends boolean = true> {
   height?: T;
   focalX?: T;
   focalY?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "users_select".
+ */
+export interface UsersSelect<T extends boolean = true> {
+  username?: T;
+  avatar?: T;
+  bio?: T;
+  location?:
+    | T
+    | {
+        city?: T;
+        district?: T;
+      };
+  rating?: T;
+  status?: T;
+  preferences?:
+    | T
+    | {
+        notifications?: T;
+        theme?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  email?: T;
+  resetPasswordToken?: T;
+  resetPasswordExpiration?: T;
+  salt?: T;
+  hash?: T;
+  loginAttempts?: T;
+  lockUntil?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "books_select".
+ */
+export interface BooksSelect<T extends boolean = true> {
+  title?: T;
+  author?: T;
+  description?: T;
+  cover?: T;
+  year?: T;
+  genre?: T;
+  condition?: T;
+  status?: T;
+  owner?: T;
+  location?:
+    | T
+    | {
+        city?: T;
+        district?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "exchanges_select".
+ */
+export interface ExchangesSelect<T extends boolean = true> {
+  book?: T;
+  fromUser?: T;
+  toUser?: T;
+  status?: T;
+  messages?:
+    | T
+    | {
+        user?: T;
+        text?: T;
+        createdAt?: T;
+        id?: T;
+      };
+  meetingDetails?:
+    | T
+    | {
+        date?: T;
+        location?: T;
+        notes?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "reviews_select".
+ */
+export interface ReviewsSelect<T extends boolean = true> {
+  user?: T;
+  rating?: T;
+  text?: T;
+  exchange?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
