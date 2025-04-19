@@ -76,9 +76,18 @@ const ReviewCard = ({
   )
 }
 
-export function ReviewsSection() {
+interface Props {
+  className?: string
+}
+
+export const ReviewsSection: React.FC<Props> = ({ className }) => {
   return (
-    <div className="relative flex w-full flex-col items-center justify-center overflow-hidden">
+    <div
+      className={cn(
+        'relative flex w-full flex-col items-center justify-center overflow-hidden',
+        className,
+      )}
+    >
       <Marquee pauseOnHover className="[--duration:30s]">
         {firstRow.map((review) => (
           <ReviewCard key={review.username} {...review} />
