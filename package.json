@@ -19,17 +19,27 @@
     "docker:prod:build": "docker-compose -f docker-compose.prod.yml up -d --build"
   },
   "dependencies": {
+    "@payloadcms/db-postgres": "3.31.0",
     "@payloadcms/next": "3.31.0",
     "@payloadcms/payload-cloud": "3.31.0",
     "@payloadcms/richtext-lexical": "3.31.0",
+    "@tailwindcss/postcss": "^4.1.4",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "cobe": "^0.6.3",
     "cross-env": "^7.0.3",
     "graphql": "^16.8.1",
+    "lucide-react": "^0.501.0",
+    "motion": "^12.7.4",
     "next": "15.2.3",
     "payload": "3.31.0",
+    "postcss": "^8.5.3",
     "react": "19.0.0",
     "react-dom": "19.0.0",
     "sharp": "0.32.6",
-    "@payloadcms/db-postgres": "3.31.0"
+    "tailwind-merge": "^3.2.0",
+    "tailwindcss": "^4.1.4",
+    "tw-animate-css": "^1.2.5"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.2.0",
