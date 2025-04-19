@@ -1,6 +1,5 @@
 import React from 'react'
 import './styles.css'
-import { InteractiveGridPattern } from '@/components/magicui/interactive-grid-pattern'
 import { AnimatedGridPattern } from '@/components/magicui/animated-grid-pattern'
 
 export const metadata = {
